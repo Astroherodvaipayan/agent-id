@@ -32,7 +32,7 @@ def validate_binding(tools,selected,expected):
     if not isinstance(schema,dict) or schema.get('type')!='object':raise PermissionError('Runtime tool input schema is missing or invalid')
     properties=schema.get('properties');required=schema.get('required')
     if not isinstance(properties,dict) or not isinstance(required,list) or set(required)!=set(expected):raise PermissionError('Runtime tool arguments differ from the reviewed backend action')
-    if not set(properties)<=set(expected)|{'_task_id','_delegation_id','_approval'}:raise PermissionError('Runtime tool exposes unapproved arguments')
+    if not set(properties)<=set(expected)|{'_task_id','_delegation_id','_approval','agntid_task_id','agntid_delegation_id','agntid_approval'}:raise PermissionError('Runtime tool exposes unapproved arguments')
     for field,kind in expected.items():
         if not isinstance(properties.get(field),dict) or properties[field].get('type')!=kind:raise PermissionError('Runtime tool argument type differs from the reviewed backend action')
     return selected

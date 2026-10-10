@@ -25,3 +25,7 @@ The probe attempts ₹25,000 and ₹25,000.01, opens separate creator A and B ta
 | Duplicate protection after uncertain send | Outbox state and provider reconciliation | Local tests only |
 
 Never turn a configured policy, SDK task event, simulated test, or provider acceptance into a claim of live policy enforcement or inbox delivery. The customer-facing demo is separate from this evidence path.
+
+## October 10 runtime attempt
+
+The isolated no-send handler was mounted temporarily and its connection test passed. The runtime discovered three handler tools, but `campaign_confirm_no_send_handler` was classified as `PENDING_REVIEW` and was absent from the agent-visible tool list. The probe therefore stopped before issuing any proposal call. This is a **fail-closed setup result**, not evidence that the amount or creator policy allowed or denied anything. The original two-tool handler was restored and its MCP connection returned to `Applied`. The runtime tool schema also exposed `agntid_task_id`, `agntid_delegation_id`, and `agntid_approval`; the reviewed binding now accepts these AgntID metadata fields while still rejecting other unexpected arguments.
