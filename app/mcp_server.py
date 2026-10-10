@@ -8,7 +8,8 @@ from .local_config import load_local_config
 
 mcp = FastMCP("campaign-email")
 # Approved Docker-to-host connection; keep loopback binding and default Origin checks.
-mcp.settings.transport_security.allowed_hosts.append("host.docker.internal:8766")
+PORT = int(os.getenv("MCP_PORT", "8766"))
+mcp.settings.transport_security.allowed_hosts.append(f"host.docker.internal:{PORT}")
 
 @mcp.tool()
 def send_nonbinding_proposal(operation_id: str, amount_paise: int) -> dict:
@@ -35,4 +36,4 @@ if __name__ == "__main__":
             return await call_next(request)
     app.add_middleware(RuntimeAuth)
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=int(os.getenv("MCP_PORT", "8766")))
+    uvicorn.run(app, host="127.0.0.1", port=PORT)
