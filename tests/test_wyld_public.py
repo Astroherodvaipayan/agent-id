@@ -92,3 +92,12 @@ def test_credential_reflection_and_invalid_schema_are_private(monkeypatch):
     monkeypatch.setattr(wyld_public, '_open', lambda request, timeout: Response({'unknown': []}, request.full_url))
     with pytest.raises(RuntimeError, match='unsupported or invalid creator schema'):
         wyld_public.list_creators()
+
+
+def test_provider_engagement_above_100_is_kept_as_raw_bounded_value():
+    record = wyld_public.profile_fields({'username': 'creator', 'engagement_rate': 120.5})
+    assert record['engagement_rate'] == 120.5
+    with pytest.raises(ValueError):
+        wyld_public.profile_fields({'username': 'creator', 'engagement_rate': 10001})
+    with pytest.raises(ValueError):
+        wyld_public.profile_fields({'username': 'creator', 'fit_score': 101})

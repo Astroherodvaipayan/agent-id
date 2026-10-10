@@ -3,8 +3,10 @@ import json
 import math
 import os
 import re
+import ssl
+import certifi
 from urllib.parse import quote, urlencode
-from urllib.request import Request, HTTPRedirectHandler, build_opener
+from urllib.request import Request, HTTPRedirectHandler, HTTPSHandler, build_opener
 
 BASE = 'https://samaj.getwyld.in/api/public/v1'
 USERNAME = re.compile(r'[A-Za-z0-9._]{1,30}')
@@ -14,7 +16,7 @@ class NoRedirect(HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         return None
 
-_open = build_opener(NoRedirect()).open
+_open = build_opener(NoRedirect(), HTTPSHandler(context=ssl.create_default_context(cafile=certifi.where()))).open
 
 
 def username(value):
@@ -86,7 +88,8 @@ def profile_fields(item):
         if value is not None:
             if isinstance(value,bool) or not isinstance(value,(int,float)) or not math.isfinite(value) or value<0:raise ValueError('Invalid creator metric')
             if field=='followers_count' and (not isinstance(value,int) or value>10**12):raise ValueError('Invalid follower count')
-            if field!='followers_count' and value>100:raise ValueError('Invalid creator percentage')
+            if field=='fit_score' and value>100:raise ValueError('Invalid fit score')
+            if field=='engagement_rate' and value>10000:raise ValueError('Invalid engagement rate')
         result[field]=value
     reasons=item.get('match_reasons')
     if reasons is not None and (not isinstance(reasons,list) or not all(isinstance(x,str) for x in reasons)):raise ValueError('Invalid creator reasons')
