@@ -1,0 +1,11 @@
+[project]
+name = "agentid-hackathon"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = ["agntid-sdk @ git+https://github.com/AGNTID-AI/agntid-python.git@f4fcd2fe476f0c4dcf800e498530b7042b830f6b", "mcp>=1.0", "fastapi>=0.115", "uvicorn>=0.30", "google-genai>=1.0", "python-dotenv>=1.0"]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

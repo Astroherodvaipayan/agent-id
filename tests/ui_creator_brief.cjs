@@ -1,0 +1,11 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const context={window:{}};vm.createContext(context);vm.runInContext(fs.readFileSync('app/web/creator-brief.js','utf8'),context);
+const html=context.window.createCreatorBrief({campaign:[{idea:'</script><img src=x onerror=alert(1)>',brief:'<b>Unsafe</b>',budget_paise:2400000,target_markets:'["India"]',evidence:'Operator supplied'}],studio:{creators:[],details:{},planning_total_paise:null,unpriced_count:0}});
+assert(!html.includes('<img src=x'));
+assert(html.includes('&lt;/script&gt;'));
+assert(html.includes('Shortlist pending.'));
+assert(html.includes('Not estimated'));
+assert.equal((html.match(/<section>/g)||[]).length,5);
+assert(html.includes('</script>'));
+assert(!html.includes('undefined'));
+console.log('Creator presentation escaping, missing data and five-slide checks passed');
