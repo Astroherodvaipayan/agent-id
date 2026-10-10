@@ -29,3 +29,9 @@ Never turn a configured policy, SDK task event, simulated test, or provider acce
 ## October 10 runtime attempt
 
 The isolated no-send handler was mounted temporarily and its connection test passed. The runtime discovered three handler tools, but `campaign_confirm_no_send_handler` was classified as `PENDING_REVIEW` and was absent from the agent-visible tool list. The probe therefore stopped before issuing any proposal call. This is a **fail-closed setup result**, not evidence that the amount or creator policy allowed or denied anything. The original two-tool handler was restored and its MCP connection returned to `Applied`. The runtime tool schema also exposed `agntid_task_id`, `agntid_delegation_id`, and `agntid_approval`; the reviewed binding now accepts these AgntID metadata fields while still rejecting other unexpected arguments.
+
+## Internal replay example
+
+An internal mock report gives a complete example of the comparison to publish once real records exist. It uses one fixed three-creator campaign and includes a legitimate ₹25,000 action, a ₹25,000.01 violation, an A-worker-to-B-operation attempt, altered or expired approval, concurrent offers above the shared budget, and an uncertain-send retry. Its IDs, policy decisions, and inbox story are **fictional test data**. They are useful for testing the report format, but they do not change the evidence statuses above.
+
+For each real replay case, record the task and delegation IDs, exact tool arguments, handler ledger delta, AgntID Reporting decision ID and denying rule, and any application approval/outbox decision. Attribute the ₹25,000 per-offer policy to AgntID only when Reporting shows that rule denied the call before the handler ran. Attribute shared-budget reservations, exact-message approval, and duplicate protection to Campaign Studio unless an independent AgntID rule is configured and observed for each boundary.
